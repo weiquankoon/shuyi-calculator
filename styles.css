@@ -1,0 +1,819 @@
+:root {
+  color-scheme: light;
+  --bg: #FAF8F5;
+  /* 暖象牙白 */
+  --panel: rgba(255, 255, 255, 0.95);
+  --panel-strong: #ffffff;
+  --panel-soft: #F4F0E6;
+  /* 表头或卡片微弱背景 */
+  --line: #E8E3DD;
+  --line-strong: #D4CDC5;
+  --text: #2C363F;
+  /* 深墨色 */
+  --muted: #8A817C;
+  /* 暖灰棕 */
+  --accent: #E05252;
+  /* 朱砂红 */
+  --accent-strong: #C93A3A;
+  --accent-soft: #FCE8E8;
+  --rose: #E05252;
+  --rose-soft: #FCE8E8;
+  --gold: #D4A373;
+  /* 雅金 */
+  --gold-soft: #FDF6EC;
+  --shadow: 0 16px 40px rgba(44, 54, 63, 0.04);
+  --radius-lg: 28px;
+  --radius-md: 20px;
+  --radius-sm: 12px;
+}
+
+/* Base resets & layout */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app-shell {
+  width: min(1280px, calc(100% - 32px));
+  margin: 30px auto 60px;
+}
+
+/* Layer 1: 交互层 (Hero & Form) */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 420px);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.hero-copy,
+.control-panel,
+.report-card {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-lg);
+}
+
+.hero-copy {
+  padding: 40px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.hero-text {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 46ch;
+}
+
+.control-panel {
+  padding: 32px;
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.field span,
+.birth-fieldset legend {
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+.field input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text);
+  padding: 16px;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.primary-button {
+  border: 0;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(224, 82, 82, 0.25);
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(224, 82, 82, 0.35);
+}
+
+.panel-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Layer 2: 身份层 (Header) */
+.report-card {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.pdf-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0;
+}
+
+.header-copy h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  color: var(--text);
+}
+
+.report-meta {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.export-btn {
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-btn:hover {
+  background: var(--accent-soft);
+}
+
+/* Common Panel styles */
+.chart-panel,
+.five-elements,
+.born-card,
+.combo-section {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel-strong);
+}
+
+/* Layer 3: 视觉层 (SVG) */
+.chart-panel {
+  padding: 16px;
+  background: radial-gradient(circle at center top, var(--gold-soft), transparent 40%), var(--panel-strong);
+}
+
+#life-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 65vh;
+  margin: 0 auto;
+}
+
+.svg-meta,
+.svg-label,
+.svg-top-tag,
+.svg-side-tag,
+.svg-box-value,
+.svg-node-value,
+.svg-small-value {
+  font-family: inherit;
+}
+
+.svg-meta {
+  fill: var(--text);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.svg-label {
+  fill: var(--muted);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.svg-box {
+  fill: #fff;
+  stroke: var(--text);
+  stroke-width: 3;
+}
+
+.template-stroke {
+  stroke: var(--text);
+  stroke-width: 3;
+}
+
+.svg-box-value {
+  fill: var(--text);
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.svg-box-value.lower {
+  font-size: 32px;
+}
+
+.svg-node {
+  fill: #fff;
+  stroke: var(--text);
+  stroke-width: 4;
+}
+
+.svg-node.focus {
+  stroke: var(--accent);
+  filter: drop-shadow(0 10px 20px rgba(224, 82, 82, 0.2));
+}
+
+.svg-node-value {
+  fill: var(--text);
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.svg-node-value.dream {
+  fill: var(--gold);
+}
+
+.svg-node-value.focus {
+  fill: var(--accent);
+  font-size: 46px;
+}
+
+.svg-node-value.side {
+  font-size: 36px;
+}
+
+.svg-small-value {
+  fill: var(--text);
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.svg-star {
+  fill: var(--accent);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* Layer 4: 核心层 (4 Pillars) */
+.quadruple-pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.code-pillar {
+  padding: 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: var(--panel-strong);
+}
+
+.code-pillar.dream {
+  background: var(--gold-soft);
+  border-color: rgba(212, 163, 115, 0.3);
+}
+
+.code-pillar.main {
+  background: var(--accent-soft);
+  border-color: rgba(224, 82, 82, 0.2);
+}
+
+.pillar-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.code-pillar > strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--text);
+}
+
+.code-pillar.dream > strong {
+  color: var(--gold);
+}
+
+.code-pillar.main > strong {
+  color: var(--accent);
+}
+
+.pillar-note {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 12px 0 0;
+  color: var(--text);
+}
+
+.pillar-subtitle {
+  font-size: 16px;
+  color: var(--text);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.text-pos {
+  color: var(--text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.text-neg {
+  color: var(--text);
+  display: block;
+}
+
+/* Layer 5: 能量层 (5 Elements) */
+.five-elements {
+  padding: 24px;
+}
+
+.section-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.section-title-row h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.section-title-row p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.element-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.element-cell {
+  padding: 16px 10px;
+  text-align: center;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.element-cell.header {
+  background: var(--panel-soft);
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.element-cell.value {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--accent);
+  margin: 0;
+}
+
+.element-table tr>*:last-child {
+  border-right: 0;
+}
+
+.element-table tr:last-child>* {
+  border-bottom: 0;
+}
+
+/* Layer 6: 统计层 (Born Digits) */
+.born-card {
+  padding: 24px;
+}
+
+.born-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+#present-digits {
+  margin: 0;
+  color: var(--accent);
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  word-break: break-all;
+}
+
+/* Layer 7: 心理层 (Summary Grid) */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.summary-grid article {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel-strong);
+}
+
+.summary-grid h3 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.summary-grid p {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.summary-grid .subline {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Layer 8: 列表层 (Detail List) */
+.analysis-detail-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.analysis-detail-section .born-card {
+  padding: 24px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.detail-list {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.detail-item p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  flex: 1;
+}
+
+.badge {
+  background: var(--accent);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge.missing {
+  background: var(--muted);
+}
+
+/* Layer 9: 深度层 (Combos) */
+.combo-section {
+  padding: 24px;
+}
+
+.combo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.combo-card-simple {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.combo-header-simple {
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+  position: relative;
+}
+
+.pos-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.num-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.combo-header-simple .num {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.combo-header-simple .meaning-title {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.warning-tag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: var(--accent-strong);
+  font-size: 11px;
+  font-weight: bold;
+  border: 1px solid var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--accent-soft);
+}
+
+.point-form-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.point-form-list li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.point-form-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.point-form-list strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.hidden-logic-card {
+  border: 2px solid var(--accent) !important;
+  background-color: #fff !important;
+  box-shadow: 0 4px 16px rgba(224, 82, 82, 0.08);
+}
+
+.hidden-logic-card .combo-header-simple {
+  border-bottom-color: rgba(217, 114, 114, 0.2);
+}
+
+/* 导出 PDF 时的特殊排版样式 */
+.pdf-exporting .combo-grid {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .combo-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .analysis-detail-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    width: min(100% - 24px, 1100px);
+    margin-top: 16px;
+    margin-bottom: 40px;
+  }
+
+  .hero-copy,
+  .control-panel,
+  .report-card {
+    padding: 20px;
+    border-radius: var(--radius-md);
+    gap: 24px;
+  }
+
+  /* Layer 4: 核心层 2x2 */
+  .quadruple-pillars {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .code-pillar {
+    padding: 16px;
+  }
+
+  .code-pillar > strong {
+    font-size: 32px;
+  }
+
+  /* Layer 5: 能量层单排不滚动 */
+  .five-elements {
+    padding: 16px;
+  }
+
+  .section-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .element-cell {
+    padding: 8px 2px;
+  }
+
+  .element-cell.header {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .element-cell.value {
+    font-size: 16px;
+  }
+
+  /* Layer 6: 拥有数字 */
+  .born-card {
+    padding: 16px;
+  }
+
+  #present-digits {
+    font-size: 28px;
+  }
+
+  /* Layer 7: 心理层 1x2 */
+  .summary-grid {
+    gap: 12px;
+  }
+
+  .summary-grid article {
+    padding: 16px;
+  }
+
+  .summary-grid p {
+    font-size: 26px;
+  }
+
+  /* Layer 8: 列表层 */
+  .analysis-detail-section .born-card {
+    padding: 16px;
+  }
+
+  /* Layer 9: 深度层 1列 */
+  .combo-section {
+    padding: 16px;
+  }
+
+  .combo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Header flex wrap */
+  .report-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .export-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* SVG scaling */
+  .chart-panel {
+    padding: 12px;
+  }
+}
+
+/* Flatpickr overrides */
+.flatpickr-calendar {
+  background: var(--panel-strong) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: var(--shadow) !important;
+  font-family: inherit !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+.flatpickr-day:hover {
+  background: var(--accent-soft) !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  font-weight: 700 !important;
+}
