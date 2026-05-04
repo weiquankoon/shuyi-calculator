@@ -46,6 +46,12 @@ const ShuYiCalculator = (function () {
     });
   }
 
+  const getZodiac = (year) => {
+    const zodiacs = ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"];
+    // 1900年是鼠年
+    return zodiacs[(year - 1900) % 12];
+  };
+
   /**
    * 核心计算函数
    * @param {string} name - 姓名
@@ -71,8 +77,9 @@ const ShuYiCalculator = (function () {
     nodes.T = reduceToDigit(nodes.I + nodes.M);
     nodes.S = reduceToDigit(nodes.J + nodes.M);
     nodes.U = reduceToDigit(nodes.T + nodes.S);
-    nodes.Q = reduceToDigit(nodes.N + nodes.O);
-    nodes.P = reduceToDigit(nodes.M + nodes.O);
+    // 修正：交叉相加
+    nodes.P = reduceToDigit(nodes.N + nodes.O); // N+O 对应 P (左下内)
+    nodes.Q = reduceToDigit(nodes.M + nodes.O); // M+O 对应 Q (右下内)
     nodes.R = reduceToDigit(nodes.Q + nodes.P);
     nodes.V = reduceToDigit(nodes.K + nodes.N);
     nodes.W = reduceToDigit(nodes.L + nodes.N);
@@ -96,7 +103,7 @@ const ShuYiCalculator = (function () {
       mainCode: nodes.O,
       innerCore: reduceToDigit(nodes.M + nodes.N + nodes.O),
       outerCore: reduceToDigit(nodes.U + nodes.R + nodes.X),
-      futureCore: nodes.W,
+      futureCore: nodes.R, // 修正：底部圆圈显示 R 而非 W
       mainTriple: joinPath(nodes, ["M", "N", "O"]),
       outerTriple: joinPath(nodes, ["U", "R", "X"]),
       presentDigits: [...new Set(coreCheckList)].sort(),
@@ -104,7 +111,8 @@ const ShuYiCalculator = (function () {
       elementRows: rotateElements(getElementByNumber(nodes.O, config.elementDefinitions), Object.values(nodes), config),
       combos: config.comboCards.map(c => ({ ...c, value: joinPath(nodes, c.path) })),
       hiddenCode,
-      duplicateList
+      duplicateList,
+      zodiac: getZodiac(parseInt(yearChunk) + (parseInt(centuryChunk) * 100))
     };
   }
 
@@ -118,14 +126,13 @@ const ShuYiCalculator = (function () {
   function validateDate(day, month, year) {
     const d = parseInt(day, 10), m = parseInt(month, 10), y = parseInt(year, 10);
     if (!d || !m || !y) return { valid: false, error: "请填写完整的出生日期" };
-    if (y < 1900 || y > new Date().getFullYear()) return { valid: false, error: "年份范围：1900 至今" };
+    if (y < 1900 || y > 2500) return { valid: false, error: "年份范围：1900 - 2500" };
     if (m < 1 || m > 12) return { valid: false, error: "月份无效" };
 
     const testDate = new Date(y, m - 1, d);
     if (testDate.getFullYear() !== y || testDate.getMonth() !== m - 1 || testDate.getDate() !== d) {
       return { valid: false, error: "日期无效" };
     }
-    if (testDate > new Date()) return { valid: false, error: "出生日期不能是未来" };
 
     return { valid: true, date: buildBirthDate(day, month, year) };
   }

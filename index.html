@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <!-- 移除 html2pdf，使用浏览器原生打印 -->
 </head>
 
 <body>
@@ -52,7 +51,10 @@
         <header class="report-header">
           <div class="header-copy">
             <h2>计算结果</h2>
-            <p id="report-meta" class="report-meta"></p>
+            <p class="report-meta">
+              <span id="report-meta"></span>
+              <span id="header-zodiac"></span>
+            </p>
           </div>
           <button class="export-btn" id="export-pdf-btn" type="button" title="导出 PDF">📄 导出 PDF</button>
         </header>
@@ -61,170 +63,164 @@
         <div id="pdf-page-1" class="pdf-page">
           <!-- 3. 视觉层 -->
           <section class="chart-panel">
-          <svg id="life-chart" viewBox="0 0 760 880" role="img" aria-label="生命数字图谱">
-            <defs>
-              <linearGradient id="focusRing" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#ef7887"></stop>
-                <stop offset="100%" stop-color="#d95d69"></stop>
-              </linearGradient>
-            </defs>
-            <g class="chart-meta">
-              <text x="62" y="54" class="svg-meta" id="svg-name">您的姓名是：</text>
-              <text x="62" y="98" class="svg-meta" id="svg-birth">出生日期是：</text>
-            </g>
-            <g class="chart-labels">
-              <text x="189" y="174" text-anchor="middle" class="svg-label">日期</text>
-              <text x="275" y="174" text-anchor="middle" class="svg-label">月份</text>
-              <text x="485" y="174" text-anchor="middle" class="svg-label">世纪</text>
-              <text x="571" y="174" text-anchor="middle" class="svg-label">年代</text>
-            </g>
-            <g class="chart-boxes">
-              <rect x="166" y="190" width="86" height="52" class="svg-box"></rect>
-              <rect x="252" y="190" width="86" height="52" class="svg-box"></rect>
-              <rect x="422" y="190" width="86" height="52" class="svg-box"></rect>
-              <rect x="508" y="190" width="86" height="52" class="svg-box"></rect>
-              <rect x="106" y="690" width="72" height="52" class="svg-box"></rect>
-              <rect x="178" y="690" width="72" height="52" class="svg-box"></rect>
-              <rect x="250" y="690" width="72" height="52" class="svg-box"></rect>
-              <rect x="438" y="690" width="72" height="52" class="svg-box"></rect>
-              <rect x="510" y="690" width="72" height="52" class="svg-box"></rect>
-              <rect x="582" y="690" width="72" height="52" class="svg-box"></rect>
-            </g>
-            <g class="chart-frame template-stroke" fill="none" stroke-linecap="square" stroke-linejoin="miter">
-              <path d="M 164 266 L 596 266"></path>
-              <path d="M 164 266 L 380 532"></path>
-              <path d="M 596 266 L 380 532"></path>
-              <path d="M 176 648 L 584 648"></path>
-              <path d="M 176 648 L 380 386"></path>
-              <path d="M 584 648 L 380 386"></path>
-              <path d="M 380 156 L 380 782"></path>
-              <path d="M 104 460 L 656 460"></path>
-              <circle cx="380" cy="460" r="112"></circle>
-            </g>
-            <g class="chart-circles">
-              <circle cx="380" cy="150" r="38" class="svg-node dream"></circle>
-              <circle cx="380" cy="460" r="40" class="svg-node focus"></circle>
-              <circle cx="72" cy="460" r="34" class="svg-node side"></circle>
-              <circle cx="688" cy="460" r="34" class="svg-node side"></circle>
-              <circle cx="380" cy="784" r="34" class="svg-node side"></circle>
-            </g>
-            <g class="chart-stars">
-              <text x="186" y="288" class="svg-star">★</text>
-              <text x="558" y="288" class="svg-star">★</text>
-            </g>
-            <g class="chart-values">
-              <text x="209" y="224" text-anchor="middle" class="svg-box-value" id="chunk-day"></text>
-              <text x="295" y="224" text-anchor="middle" class="svg-box-value" id="chunk-month"></text>
-              <text x="465" y="224" text-anchor="middle" class="svg-box-value" id="chunk-century"></text>
-              <text x="551" y="224" text-anchor="middle" class="svg-box-value" id="chunk-year"></text>
-              <text x="380" y="164" text-anchor="middle" class="svg-node-value dream" id="dream-code"></text>
-              <text x="380" y="472" text-anchor="middle" class="svg-node-value focus" id="main-code"></text>
-              <text x="72" y="474" text-anchor="middle" class="svg-node-value side" id="outer-core"></text>
-              <text x="688" y="474" text-anchor="middle" class="svg-node-value side" id="inner-core"></text>
-              <text x="380" y="798" text-anchor="middle" class="svg-node-value side" id="future-core"></text>
-              <text x="236" y="318" text-anchor="middle" class="svg-small-value" id="i-node"></text>
-              <text x="314" y="318" text-anchor="middle" class="svg-small-value" id="j-node"></text>
-              <text x="446" y="318" text-anchor="middle" class="svg-small-value" id="k-node"></text>
-              <text x="524" y="318" text-anchor="middle" class="svg-small-value" id="l-node"></text>
-              <text x="332" y="406" text-anchor="middle" class="svg-small-value" id="m-node"></text>
-              <text x="428" y="406" text-anchor="middle" class="svg-small-value" id="n-node"></text>
-              <text x="334" y="538" text-anchor="middle" class="svg-small-value" id="p-node"></text>
-              <text x="426" y="538" text-anchor="middle" class="svg-small-value" id="q-node"></text>
-              <text x="142" y="726" text-anchor="middle" class="svg-box-value lower" id="u-node"></text>
-              <text x="214" y="726" text-anchor="middle" class="svg-box-value lower" id="s-node"></text>
-              <text x="286" y="726" text-anchor="middle" class="svg-box-value lower" id="t-node"></text>
-              <text x="474" y="726" text-anchor="middle" class="svg-box-value lower" id="v-node"></text>
-              <text x="546" y="726" text-anchor="middle" class="svg-box-value lower" id="w-node"></text>
-              <text x="618" y="726" text-anchor="middle" class="svg-box-value lower" id="x-node"></text>
-            </g>
-          </svg>
-        </section>
+            <svg id="life-chart" viewBox="0 0 760 880" role="img" aria-label="生命数字图谱">
+
+              <g class="chart-meta">
+                <text x="62" y="54" class="svg-meta" id="svg-name">您的姓名是：</text>
+                <text x="62" y="98" class="svg-meta" id="svg-birth">出生日期是：</text>
+                <text x="360" y="98" class="svg-meta" id="svg-zodiac"></text>
+              </g>
+              <g class="chart-labels">
+                <text x="189" y="174" text-anchor="middle" class="svg-label">日期</text>
+                <text x="275" y="174" text-anchor="middle" class="svg-label">月份</text>
+                <text x="485" y="174" text-anchor="middle" class="svg-label">世纪</text>
+                <text x="571" y="174" text-anchor="middle" class="svg-label">年代</text>
+              </g>
+              <g class="chart-boxes">
+                <rect x="166" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="252" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="422" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="508" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="106" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="178" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="250" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="438" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="510" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="582" y="690" width="72" height="52" class="svg-box"></rect>
+              </g>
+              <g class="chart-frame template-stroke" fill="none" stroke-linecap="square" stroke-linejoin="miter">
+                <path d="M 164 266 L 596 266"></path>
+                <path d="M 164 266 L 380 532"></path>
+                <path d="M 596 266 L 380 532"></path>
+                <path d="M 176 648 L 584 648"></path>
+                <path d="M 176 648 L 380 386"></path>
+                <path d="M 584 648 L 380 386"></path>
+                <path d="M 380 156 L 380 782"></path>
+                <path d="M 104 460 L 656 460"></path>
+                <circle cx="380" cy="460" r="112"></circle>
+              </g>
+              <g class="chart-circles">
+                <circle cx="380" cy="150" r="38" class="svg-node dream"></circle>
+                <circle cx="380" cy="460" r="40" class="svg-node focus"></circle>
+                <circle cx="72" cy="460" r="34" class="svg-node side"></circle>
+                <circle cx="688" cy="460" r="34" class="svg-node side"></circle>
+                <circle cx="380" cy="784" r="34" class="svg-node side"></circle>
+              </g>
+              <g class="chart-stars">
+                <text x="186" y="288" class="svg-star">★</text>
+                <text x="558" y="288" class="svg-star">★</text>
+              </g>
+              <g class="chart-values">
+                <text x="209" y="224" text-anchor="middle" class="svg-box-value" id="chunk-day"></text>
+                <text x="295" y="224" text-anchor="middle" class="svg-box-value" id="chunk-month"></text>
+                <text x="465" y="224" text-anchor="middle" class="svg-box-value" id="chunk-century"></text>
+                <text x="551" y="224" text-anchor="middle" class="svg-box-value" id="chunk-year"></text>
+                <text x="380" y="164" text-anchor="middle" class="svg-node-value dream" id="dream-code"></text>
+                <text x="380" y="472" text-anchor="middle" class="svg-node-value focus" id="main-code"></text>
+                <text x="72" y="474" text-anchor="middle" class="svg-node-value side" id="outer-core"></text>
+                <text x="688" y="474" text-anchor="middle" class="svg-node-value side" id="inner-core"></text>
+                <text x="380" y="798" text-anchor="middle" class="svg-node-value side" id="future-core"></text>
+                <text x="236" y="318" text-anchor="middle" class="svg-small-value" id="i-node"></text>
+                <text x="314" y="318" text-anchor="middle" class="svg-small-value" id="j-node"></text>
+                <text x="446" y="318" text-anchor="middle" class="svg-small-value" id="k-node"></text>
+                <text x="524" y="318" text-anchor="middle" class="svg-small-value" id="l-node"></text>
+                <text x="332" y="406" text-anchor="middle" class="svg-small-value" id="m-node"></text>
+                <text x="428" y="406" text-anchor="middle" class="svg-small-value" id="n-node"></text>
+                <text x="334" y="538" text-anchor="middle" class="svg-small-value" id="p-node"></text>
+                <text x="426" y="538" text-anchor="middle" class="svg-small-value" id="q-node"></text>
+                <text x="142" y="726" text-anchor="middle" class="svg-box-value lower" id="u-node"></text>
+                <text x="214" y="726" text-anchor="middle" class="svg-box-value lower" id="s-node"></text>
+                <text x="286" y="726" text-anchor="middle" class="svg-box-value lower" id="t-node"></text>
+                <text x="474" y="726" text-anchor="middle" class="svg-box-value lower" id="v-node"></text>
+                <text x="546" y="726" text-anchor="middle" class="svg-box-value lower" id="w-node"></text>
+                <text x="618" y="726" text-anchor="middle" class="svg-box-value lower" id="x-node"></text>
+              </g>
+            </svg>
+          </section>
         </div>
 
         <!-- Page 2 -->
         <div id="pdf-page-2" class="pdf-page">
+          <!-- 5. 能量层 -->
+          <section class="five-elements">
+            <div class="section-title-row">
+              <h3>五行分布</h3>
+            </div>
+            <div class="element-table-wrap">
+              <table class="element-table" id="element-table"></table>
+            </div>
+          </section>
+
           <!-- 4. 核心层 -->
           <div class="hero-codes quadruple-pillars">
-          <article class="code-pillar dream">
-            <span class="pillar-label">本源梦想</span>
-            <strong id="dream-highlight"></strong>
-            <p id="dream-text" class="pillar-note"></p>
-          </article>
-          <article class="code-pillar main">
-            <span class="pillar-label">主性格</span>
-            <strong id="main-highlight"></strong>
-            <p id="main-text" class="pillar-note"></p>
-          </article>
-          <article class="code-pillar star-i">
-            <span class="pillar-label">星号位（左）</span>
-            <strong id="star-i-highlight"></strong>
-            <p id="star-i-text" class="pillar-note"></p>
-          </article>
-          <article class="code-pillar star-l">
-            <span class="pillar-label">星号位（右）</span>
-            <strong id="star-l-highlight"></strong>
-            <p id="star-l-text" class="pillar-note"></p>
-          </article>
-        </div>
-
-        <!-- 5. 能量层 -->
-        <section class="five-elements">
-          <div class="section-title-row">
-            <h3>五行分布</h3>
-            <p>以主性格所属五行为起点，按完整图谱 15 个节点统计</p>
+            <article class="code-pillar dream">
+              <span class="pillar-label">本源梦想</span>
+              <strong id="dream-highlight"></strong>
+              <p id="dream-text" class="pillar-note"></p>
+            </article>
+            <article class="code-pillar main">
+              <span class="pillar-label">主性格</span>
+              <strong id="main-highlight"></strong>
+              <p id="main-text" class="pillar-note"></p>
+            </article>
+            <article class="code-pillar star-i">
+              <span class="pillar-label">星号位（左）</span>
+              <strong id="star-i-highlight"></strong>
+              <p id="star-i-text" class="pillar-note"></p>
+            </article>
+            <article class="code-pillar star-l">
+              <span class="pillar-label">星号位（右）</span>
+              <strong id="star-l-highlight"></strong>
+              <p id="star-l-text" class="pillar-note"></p>
+            </article>
           </div>
-          <div class="element-table-wrap">
-            <table class="element-table" id="element-table"></table>
-          </div>
-        </section>
 
-        <!-- 6. 统计层 -->
-        <div class="born-digits">
-          <article class="born-card present-only">
-            <h3>先天拥有数字</h3>
-            <p id="present-digits"></p>
-          </article>
-        </div>
+          <!-- 6. 统计层 -->
+          <div class="born-digits">
+            <article class="born-card present-only">
+              <h3>先天拥有数字</h3>
+              <p id="present-digits"></p>
+            </article>
+          </div>
 
         </div>
 
         <!-- Page 3 -->
         <div id="pdf-page-3" class="pdf-page">
           <!-- 7. 心理层 -->
-        <div class="summary-grid inner-outer-codes" id="summary-cards"></div>
+          <div class="summary-grid inner-outer-codes" id="summary-cards"></div>
 
-        <!-- 8. 列表层 -->
-        <aside class="summary-wrap">
-          <div class="analysis-detail-section">
-            <article class="born-card" id="duplicate-section">
-              <h3>重复号解析</h3>
-              <div id="duplicate-content" class="detail-list"></div>
-            </article>
-            <article class="born-card" id="missing-section">
-              <h3>缺失号解析</h3>
-              <div id="missing-content" class="detail-list"></div>
-            </article>
-          </div>
-        </aside>
+          <!-- 8. 列表层 -->
+          <aside class="summary-wrap">
+            <div class="analysis-detail-section">
+              <article class="born-card" id="duplicate-section">
+                <h3>重复号解析</h3>
+                <div id="duplicate-content" class="detail-list"></div>
+              </article>
+              <article class="born-card" id="missing-section">
+                <h3>缺失号解析</h3>
+                <div id="missing-content" class="detail-list"></div>
+              </article>
+            </div>
+          </aside>
         </div>
 
         <!-- Page 4 -->
         <div id="pdf-page-4" class="pdf-page">
           <!-- 9. 深度层 -->
-        <section class="combo-section">
-          <div class="section-title-row">
-            <h3>联合数字</h3>
-            <p>当前输出计算结果，后续可直接对接数据库内容与解释文案</p>
-          </div>
-          <div class="combo-grid" id="combo-grid"></div>
-        </section>
+          <section class="combo-section">
+            <div class="section-title-row">
+              <h3>联合数字</h3>
+              <p>当前输出计算结果，后续可直接对接数据库内容与解释文案</p>
+            </div>
+            <div class="combo-grid" id="combo-grid"></div>
+          </section>
         </div>
       </article>
     </section>
   </main>
 
-  <script src="meanings.js"></script>
-  <script src="content.js"></script>
+
   <script src="chart-config.js"></script>
   <script src="calculator.js"></script>
   <script src="app.js"></script>
@@ -241,10 +237,15 @@
         locale: "zh",
         dateFormat: "Y-m-d",
         altInput: true,
-        altFormat: "Y 年 m 月 d 日",
+        altFormat: "d/m/Y",
         minDate: "1900-01-01",
-        maxDate: "today",
-        onReady: function (selectedDates) {
+        // 允许选择未来日期（用于起名/预测）
+        maxDate: null, 
+        // 允许直接选择年份和月份，不用一个一个点
+        monthSelectorType: "dropdown", 
+        // 强制在移动端也使用自定义选择器，以保证 d/m/Y 格式生效
+        disableMobile: true,
+        onReady: function (selectedDates, dateStr, instance) {
           // 页面加载时自动填充 hidden inputs
           if (selectedDates.length > 0) {
             syncHiddenInputs(selectedDates[0]);

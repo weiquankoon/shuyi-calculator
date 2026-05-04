@@ -156,7 +156,7 @@ h1 {
 
 /* Layer 2: 身份层 (Header) */
 .report-card {
-  padding: 32px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -348,7 +348,7 @@ h1 {
   letter-spacing: 1px;
 }
 
-.code-pillar > strong {
+.code-pillar>strong {
   display: block;
   font-size: 20px;
   font-weight: 900;
@@ -356,11 +356,11 @@ h1 {
   color: var(--text);
 }
 
-.code-pillar.dream > strong {
+.code-pillar.dream>strong {
   color: var(--gold);
 }
 
-.code-pillar.main > strong {
+.code-pillar.main>strong {
   color: var(--accent);
 }
 
@@ -391,7 +391,7 @@ h1 {
 
 /* Layer 5: 能量层 (5 Elements) */
 .five-elements {
-  padding: 24px;
+  padding: 16px;
 }
 
 .section-title-row {
@@ -422,7 +422,8 @@ h1 {
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   overflow: hidden;
-  table-layout: fixed;
+  table-layout: auto;
+  /* 改为 auto 允许列根据内容伸缩 */
 }
 
 .element-cell {
@@ -437,7 +438,10 @@ h1 {
   background: var(--panel-soft);
   color: var(--muted);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
+  padding: 8px 4px !important;
+  white-space: nowrap;
+  /* 强制表头不换行 */
 }
 
 .element-cell.value {
@@ -457,7 +461,7 @@ h1 {
 
 /* Layer 6: 统计层 (Born Digits) */
 .born-card {
-  padding: 24px;
+  padding: 16px;
 }
 
 .born-card h3 {
@@ -560,7 +564,7 @@ h1 {
 
 /* Layer 9: 深度层 (Combos) */
 .combo-section {
-  padding: 24px;
+  padding: 16px;
 }
 
 .combo-grid {
@@ -667,9 +671,24 @@ h1 {
   border-bottom-color: rgba(217, 114, 114, 0.2);
 }
 
-/* 导出 PDF 时的特殊排版样式 */
-.pdf-exporting .combo-grid {
-  grid-template-columns: repeat(2, 1fr) !important;
+.pdf-exporting #pdf-page-1 {
+  break-before: auto;
+}
+
+.pdf-exporting .code-pillar,
+.pdf-exporting .element-table-wrap,
+.pdf-exporting .summary-grid article,
+.pdf-exporting .born-card,
+.pdf-exporting .combo-card-simple {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+  margin-bottom: 8px;
+  /* 给分页留出缓冲余地 */
+}
+
+/* 兼容 html2pdf.js 旧版渲染器，移除复杂渐变 */
+.pdf-exporting .chart-panel {
+  background: var(--panel-strong) !important;
 }
 
 /* Responsive adjustments */
@@ -688,8 +707,13 @@ h1 {
 }
 
 @media (max-width: 768px) {
+  body {
+    font-size: 17px;
+  }
+
   .app-shell {
-    width: min(100% - 24px, 1100px);
+    width: min(100% - 12px, 1100px);
+    /* 进一步增加外部宽度 */
     margin-top: 16px;
     margin-bottom: 40px;
   }
@@ -697,28 +721,43 @@ h1 {
   .hero-copy,
   .control-panel,
   .report-card {
-    padding: 20px;
+    padding: 12px;
+    /* 减小容器内衬，释放更多空间给内容 */
     border-radius: var(--radius-md);
     gap: 24px;
   }
 
-  /* Layer 4: 核心层 2x2 */
+  /* Layer 4: 核心层 1列 */
   .quadruple-pillars {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .code-pillar {
     padding: 16px;
   }
 
-  .code-pillar > strong {
-    font-size: 32px;
+  .code-pillar>strong {
+    font-size: 36px;
+  }
+
+  .pillar-note {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .pillar-subtitle {
+    font-size: 18px;
+    font-weight: 800;
   }
 
   /* Layer 5: 能量层单排不滚动 */
   .five-elements {
     padding: 16px;
+  }
+
+  .five-elements {
+    padding: 10px 6px;
   }
 
   .section-title-row {
@@ -765,6 +804,15 @@ h1 {
   /* Layer 8: 列表层 */
   .analysis-detail-section .born-card {
     padding: 16px;
+  }
+
+  .detail-item p,
+  .point-form-list li {
+    font-size: 15px;
+  }
+
+  .combo-header-simple .meaning-title {
+    font-size: 18px;
   }
 
   /* Layer 9: 深度层 1列 */
@@ -816,4 +864,85 @@ h1 {
 
 .flatpickr-current-month .flatpickr-monthDropdown-months {
   font-weight: 700 !important;
+}
+
+/* --- 终极原生打印样式优化 --- */
+@media print {
+
+  /* 隐藏所有干扰元素 */
+  .hero,
+  .export-btn,
+  .panel-note,
+  .flatpickr-calendar {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .app-shell {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .dashboard {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .report-card {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  /* 移除渐变，确保打印清晰且省墨 */
+  .chart-panel {
+    background: #fdfaf5 !important;
+    /* 使用浅色背景替代渐变 */
+    border: 1px solid #eee;
+  }
+
+  /* 强制分页逻辑 */
+  .pdf-page {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  #pdf-page-1 {
+    page-break-before: avoid;
+    break-before: avoid;
+  }
+
+  /* 核心防切割魔法 */
+  .code-pillar,
+  .element-table-wrap,
+  .summary-grid article,
+  .born-card,
+  .combo-card-simple {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 20px !important;
+    display: block !important;
+    /* 确保 break-inside 生效 */
+  }
+
+  /* 打印时保持两列布局（针对联合数字） */
+  .combo-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+  }
+
+  /* 调整字体颜色，确保黑色打印清晰 */
+  h1,
+  h2,
+  h3,
+  strong {
+    color: #000 !important;
+  }
 }

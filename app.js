@@ -1,9 +1,23 @@
 /**
  * 数易生命数字 — 渲染与事件绑定模块
- * 依赖：calculator.js (ShuYiCalculator), content.js (APP_CONTENT), meanings.js (numberMeanings)
+ * 依赖：calculator.js (ShuYiCalculator)
  */
-(function () {
-  const config = window.APP_CONTENT;
+(async function () {
+  let config;
+  let numberMeanings;
+
+  try {
+    const [contentRes, meaningsRes] = await Promise.all([
+      fetch("data/content.json"),
+      fetch("data/meanings.json")
+    ]);
+    config = await contentRes.json();
+    numberMeanings = await meaningsRes.json();
+  } catch (error) {
+    console.error("加载数据文件失败:", error);
+    alert("系统配置数据加载失败，请检查网络或配置目录。");
+    return;
+  }
 
   // --- UI 元素获取 ---
   const form = document.getElementById("profile-form");
@@ -45,12 +59,17 @@
     U: document.getElementById("u-node"),
     V: document.getElementById("v-node"),
     W: document.getElementById("w-node"),
-    X: document.getElementById("x-node")
+    X: document.getElementById("x-node"),
+    zodiac: document.getElementById("svg-zodiac")
   };
 
   // --- 渲染函数 ---
   function renderMeta(profile) {
     if (reportMetaEl) reportMetaEl.textContent = `${profile.name} · 阳历 ${profile.displayDate}`;
+    const headerZodiacEl = document.getElementById("header-zodiac");
+    if (headerZodiacEl) {
+      headerZodiacEl.textContent = ` · ${profile.zodiac}`;
+    }
 
     const getSingleMsg = (code) => numberMeanings.singleDigits?.[code] || { pos: "暂无解析", neg: "" };
 
@@ -148,7 +167,7 @@
   function renderSvg(profile) {
     if (!svgBindings.name) return;
     svgBindings.name.textContent = `您的姓名是：${profile.name}`;
-    svgBindings.birth.textContent = `出生日期是：${profile.displayDate}`;
+    svgBindings.birth.textContent = `出生日期是：${profile.displayDate} · ${profile.zodiac}`;
     svgBindings.chunkDay.textContent = profile.rawChunks.day;
     svgBindings.chunkMonth.textContent = profile.rawChunks.month;
     svgBindings.chunkCentury.textContent = profile.rawChunks.century;
@@ -158,6 +177,7 @@
     svgBindings.outer.textContent = profile.outerCore;
     svgBindings.inner.textContent = profile.innerCore;
     svgBindings.future.textContent = profile.futureCore;
+    if (svgBindings.zodiac) svgBindings.zodiac.textContent = "";
     ["I", "J", "K", "L", "M", "N", "P", "Q", "T", "S", "U", "V", "W", "X"].forEach(k => {
       if (svgBindings[k]) svgBindings[k].textContent = profile.nodes[k];
     });
