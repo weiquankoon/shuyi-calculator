@@ -6,21 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>数易生命数字计算工具</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
-  <!-- 移除 html2pdf，使用浏览器原生打印 -->
 </head>
 
 <body>
   <main class="app-shell">
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">基础版自动计算工具</p>
-        <h1>数易生命数字图谱</h1>
+        <p class="eyebrow">基础版</p>
+        <h1>数易生命数字计算器</h1>
         <p class="hero-text">
-          输入姓名与阳历出生日期，自动生成图谱结构、五行分布与联合数字。
-          当前版本已按前后端分离的思路组织，后续接数据库会更顺。
+          通过姓名与阳历生日的深度计算，为您自动生成精准的生命数字倒三角图谱、五行能量分布及多维度联合数字解析。助您从数字维度洞察天赋潜能，平衡五行能量，并科学探索未来的运势走向。
         </p>
       </div>
 
@@ -29,19 +24,86 @@
           <span>姓名</span>
           <input id="name-input" name="name" type="text" placeholder="请输入姓名" value="">
         </label>
-        <fieldset class="field birth-fieldset">
-          <legend>阳历出生日期</legend>
+        <!-- 出生日期与子时同行 -->
+        <div class="field birth-section" style="padding:0; margin:0;">
+          <div class="field-header-row"
+            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label style="font-size:15px; font-weight:700; color:var(--text); margin:0;">出生日期</label>
+
+            <div class="zi-hour-inline" style="display:flex; align-items:center; gap:8px;">
+              <span class="toggle-hint"
+                style="font-size:13px; color:var(--text); font-weight:700; margin:0;">子时出生</span>
+              <span class="toggle-hint" style="font-size:12px; color:var(--muted); margin:0;">(晚 23:00 — 凌晨
+                01:00)</span>
+              <label class="sy-switch" style="margin:0;">
+                <input type="checkbox" id="zi-hour-check" name="ziHour">
+                <div class="sy-slider"></div>
+              </label>
+            </div>
+          </div>
           <div class="date-picker-container">
             <input id="birth-date-picker" type="text" placeholder="请选择出生日期" readonly
-              style="width: 100%; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, 0.9); padding: 16px 18px; font-size: 18px; cursor: pointer;">
+              style="width: 100%; border: 1px solid var(--line); border-radius: 12px; background: rgba(255, 255, 255, 0.9); padding: 14px 16px; font-size: 16px; cursor: pointer; color: var(--text);">
 
             <input type="hidden" id="birth-day" name="birthDay">
             <input type="hidden" id="birth-month" name="birthMonth">
             <input type="hidden" id="birth-year" name="birthYear">
           </div>
-        </fieldset>
+          <div class="smooth-expand" id="zi-hour-expand" aria-hidden="true">
+            <div style="overflow:hidden; padding-top:6px;">
+              <p class="toggle-note" id="zi-hour-note"
+                style="margin:0; font-size:12px; color:var(--muted); display:block;">勾选后，系统将自动将计算日期 +1 天处理。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 双胞胎选项 -->
+        <div class="field twin-section" id="twin-field"
+          style="padding:0; margin:0; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 4px;">
+          <div class="twin-header-row" style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-size:15px; font-weight:700; color:var(--text); margin:0;">是否双胞胎</label>
+
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="toggle-hint twin-status-text" id="twin-status-text"
+                style="font-size:14px; font-weight:700; color:var(--muted); margin:0;">否</span>
+              <label class="sy-switch" style="margin:0;">
+                <input type="checkbox" id="twin-check" name="twin">
+                <div class="sy-slider"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 展开区 -->
+          <div class="smooth-expand" id="twin-expand" aria-hidden="true">
+            <div class="twin-expand-inner" style="overflow:hidden; padding-top:8px;">
+              <div class="twin-note-box" style="margin-top: 0; margin-bottom: 12px;">
+                <div
+                  style="color:var(--accent); font-size:14px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:4px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  注意事项
+                </div>
+                <ul style="margin:0; padding-left:20px; font-size:13px; color:var(--muted); line-height:1.6;">
+                  <li>若是双胞胎老大，父母日期一栏需填写父亲生日；</li>
+                  <li>若是双胞胎老二，父母日期一栏需填写母亲生日；</li>
+                  <li>若不是双胞胎，父母日期一栏不需要填写。</li>
+                </ul>
+              </div>
+
+              <div class="date-picker-container">
+                <input id="parent-date-picker" type="text" placeholder="请选择父母生日日期" readonly
+                  style="width: 100%; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,0.9); padding: 14px 16px; font-size: 16px; cursor: pointer; color: var(--text);">
+                <input type="hidden" id="parent-birth-date-hidden">
+              </div>
+            </div>
+          </div>
+        </div>
+
         <button class="primary-button" type="submit">立即计算</button>
-        <p class="panel-note">本版聚焦基础自动计算，详细解读内容可在下一步接入后端数据库。</p>
       </form>
     </section>
 
@@ -211,58 +273,27 @@
           <section class="combo-section">
             <div class="section-title-row">
               <h3>联合数字</h3>
-              <p>当前输出计算结果，后续可直接对接数据库内容与解释文案</p>
             </div>
             <div class="combo-grid" id="combo-grid"></div>
           </section>
+
+          <!-- 查看流年按钮 -->
+          <div class="flow-action-row" id="flow-action-row">
+            <a id="view-flow-btn" class="flow-btn" href="#" style="display:none;">
+              🔮 查看流年运势
+            </a>
+          </div>
+
         </div>
       </article>
     </section>
   </main>
 
 
-  <script src="chart-config.js"></script>
-  <script src="calculator.js"></script>
-  <script src="app.js"></script>
-  <script src="export.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      function syncHiddenInputs(date) {
-        document.getElementById('birth-day').value = date.getDate();
-        document.getElementById('birth-month').value = date.getMonth() + 1;
-        document.getElementById('birth-year').value = date.getFullYear();
-      }
+  <script type="module" src="/src/app.js"></script>
+  <script type="module" src="/src/export.js"></script>
+  <script type="module" src="/src/datepicker.js"></script>
 
-      flatpickr("#birth-date-picker", {
-        locale: "zh",
-        dateFormat: "Y-m-d",
-        altInput: true,
-        altFormat: "d/m/Y",
-        minDate: "1900-01-01",
-        // 允许选择未来日期（用于起名/预测）
-        maxDate: null, 
-        // 允许直接选择年份和月份，不用一个一个点
-        monthSelectorType: "dropdown", 
-        // 强制在移动端也使用自定义选择器，以保证 d/m/Y 格式生效
-        disableMobile: true,
-        onReady: function (selectedDates, dateStr, instance) {
-          // 页面加载时自动填充 hidden inputs
-          if (selectedDates.length > 0) {
-            syncHiddenInputs(selectedDates[0]);
-            // 延迟触发计算，确保 app.js 已加载
-            setTimeout(function () {
-              document.getElementById('profile-form').dispatchEvent(new Event('submit'));
-            }, 0);
-          }
-        },
-        onChange: function (selectedDates) {
-          if (selectedDates.length > 0) {
-            syncHiddenInputs(selectedDates[0]);
-          }
-        }
-      });
-    });
-  </script>
 </body>
 
 </html>

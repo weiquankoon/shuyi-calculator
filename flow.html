@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>流年运势 — 数易生命数字</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <main class="app-shell" style="max-width: 800px; margin: 0 auto; padding: 24px 16px;">
+    
+    <header class="flow-header" style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+      <a href="/" style="text-decoration: none; color: var(--accent); font-weight: bold;">← 返回主页</a>
+      <h1 style="margin: 0; font-size: 24px; color: var(--text);">流年运势计算</h1>
+      <div style="width: 70px;"></div> <!-- Placeholder for balance -->
+    </header>
+
+    <section class="dashboard" style="margin-top: 0;">
+      <!-- 独立控制模块：Tab 和 日期选择 -->
+      <article class="control-panel" style="margin-bottom: 24px; display: block; padding: 24px;">
+        <!-- 日期选择器区域 -->
+        <div class="field birth-section" style="padding:0; margin:0;">
+          <div class="field-header-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <label style="font-size:15px; font-weight:700; color:var(--text); margin:0;">查询日期</label>
+          </div>
+          <div class="date-picker-container">
+            <input id="flow-date-picker" type="text" placeholder="请选择查询日期" readonly
+              style="width: 100%; border: 1px solid var(--line); border-radius: 12px; background: rgba(255, 255, 255, 0.9); padding: 14px 16px; font-size: 16px; cursor: pointer; color: var(--text);">
+          </div>
+        </div>
+      </article>
+
+      <article class="report-card">
+        
+        <!-- Tab 切换区域 -->
+        <div class="flow-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--line); padding-bottom: 16px;">
+          <button class="flow-tab-btn active" data-tab="year" style="flex:1; padding: 12px; border:none; background: var(--accent-soft); color: var(--accent-strong); font-weight: bold; border-radius: 8px; cursor: pointer;">流年</button>
+          <button class="flow-tab-btn" data-tab="month" style="flex:1; padding: 12px; border:none; background: transparent; color: var(--muted); font-weight: bold; cursor: pointer; border-radius: 8px;">流月</button>
+          <button class="flow-tab-btn" data-tab="day" style="flex:1; padding: 12px; border:none; background: transparent; color: var(--muted); font-weight: bold; cursor: pointer; border-radius: 8px;">流日</button>
+        </div>
+
+        <header class="report-header">
+          <div class="header-copy">
+            <h2>计算结果</h2>
+            <p class="report-meta">
+              <span id="report-meta"></span>
+              <span id="header-zodiac"></span>
+            </p>
+          </div>
+          <button class="export-btn" id="export-pdf-btn" type="button" title="导出 PDF">📄 导出 PDF</button>
+        </header>
+
+        <div id="pdf-page-1" class="pdf-page">
+          <!-- 视觉层: 完整面谱 -->
+          <section class="chart-panel">
+            <svg id="life-chart" viewBox="0 0 760 880" role="img" aria-label="生命数字图谱">
+              <g class="chart-meta">
+                <text x="62" y="54" class="svg-meta" id="svg-name">您的姓名是：</text>
+                <text x="62" y="98" class="svg-meta" id="svg-birth">计算基准日：</text>
+                <text x="360" y="98" class="svg-meta" id="svg-zodiac"></text>
+              </g>
+              <g class="chart-labels">
+                <text x="189" y="174" text-anchor="middle" class="svg-label">日期</text>
+                <text x="275" y="174" text-anchor="middle" class="svg-label">月份</text>
+                <text x="485" y="174" text-anchor="middle" class="svg-label">世纪</text>
+                <text x="571" y="174" text-anchor="middle" class="svg-label">年代</text>
+              </g>
+              <g class="chart-boxes">
+                <rect x="166" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="252" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="422" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="508" y="190" width="86" height="52" class="svg-box"></rect>
+                <rect x="106" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="178" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="250" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="438" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="510" y="690" width="72" height="52" class="svg-box"></rect>
+                <rect x="582" y="690" width="72" height="52" class="svg-box"></rect>
+              </g>
+              <g class="chart-frame template-stroke" fill="none" stroke-linecap="square" stroke-linejoin="miter">
+                <path d="M 164 266 L 596 266"></path>
+                <path d="M 164 266 L 380 532"></path>
+                <path d="M 596 266 L 380 532"></path>
+                <path d="M 176 648 L 584 648"></path>
+                <path d="M 176 648 L 380 386"></path>
+                <path d="M 584 648 L 380 386"></path>
+                <path d="M 380 156 L 380 782"></path>
+                <path d="M 104 460 L 656 460"></path>
+                <circle cx="380" cy="460" r="112"></circle>
+              </g>
+              <g class="chart-circles">
+                <circle cx="380" cy="150" r="38" class="svg-node dream"></circle>
+                <circle cx="380" cy="460" r="40" class="svg-node focus"></circle>
+                <circle cx="72" cy="460" r="34" class="svg-node side"></circle>
+                <circle cx="688" cy="460" r="34" class="svg-node side"></circle>
+                <circle cx="380" cy="784" r="34" class="svg-node side"></circle>
+              </g>
+              <g class="chart-stars">
+                <text x="186" y="288" class="svg-star">★</text>
+                <text x="558" y="288" class="svg-star">★</text>
+              </g>
+              <g class="chart-values">
+                <text x="209" y="224" text-anchor="middle" class="svg-box-value" id="chunk-day"></text>
+                <text x="295" y="224" text-anchor="middle" class="svg-box-value" id="chunk-month"></text>
+                <text x="465" y="224" text-anchor="middle" class="svg-box-value" id="chunk-century"></text>
+                <text x="551" y="224" text-anchor="middle" class="svg-box-value" id="chunk-year"></text>
+                <text x="380" y="164" text-anchor="middle" class="svg-node-value dream" id="dream-code"></text>
+                <text x="380" y="472" text-anchor="middle" class="svg-node-value focus" id="main-code"></text>
+                <text x="72" y="474" text-anchor="middle" class="svg-node-value side" id="outer-core"></text>
+                <text x="688" y="474" text-anchor="middle" class="svg-node-value side" id="inner-core"></text>
+                <text x="380" y="798" text-anchor="middle" class="svg-node-value side" id="future-core"></text>
+                <text x="236" y="318" text-anchor="middle" class="svg-small-value" id="i-node"></text>
+                <text x="314" y="318" text-anchor="middle" class="svg-small-value" id="j-node"></text>
+                <text x="446" y="318" text-anchor="middle" class="svg-small-value" id="k-node"></text>
+                <text x="524" y="318" text-anchor="middle" class="svg-small-value" id="l-node"></text>
+                <text x="332" y="406" text-anchor="middle" class="svg-small-value" id="m-node"></text>
+                <text x="428" y="406" text-anchor="middle" class="svg-small-value" id="n-node"></text>
+                <text x="334" y="538" text-anchor="middle" class="svg-small-value" id="p-node"></text>
+                <text x="426" y="538" text-anchor="middle" class="svg-small-value" id="q-node"></text>
+                <text x="142" y="726" text-anchor="middle" class="svg-box-value lower" id="u-node"></text>
+                <text x="214" y="726" text-anchor="middle" class="svg-box-value lower" id="s-node"></text>
+                <text x="286" y="726" text-anchor="middle" class="svg-box-value lower" id="t-node"></text>
+                <text x="474" y="726" text-anchor="middle" class="svg-box-value lower" id="v-node"></text>
+                <text x="546" y="726" text-anchor="middle" class="svg-box-value lower" id="w-node"></text>
+                <text x="618" y="726" text-anchor="middle" class="svg-box-value lower" id="x-node"></text>
+              </g>
+            </svg>
+          </section>
+
+          <!-- 能量层: 五行分布 -->
+          <section class="five-elements">
+            <div class="section-title-row">
+              <h3>五行分布</h3>
+            </div>
+            <div class="element-table-wrap">
+              <table class="element-table" id="element-table"></table>
+            </div>
+          </section>
+
+          <section class="flow-meaning-section" style="margin-top: 32px;">
+            <div class="section-title-row">
+              <h3 id="flow-meaning-title">流年含义</h3>
+            </div>
+            <div id="flow-content-area"></div>
+          </section>
+        </div>
+
+      </article>
+    </section>
+  </main>
+
+  <script type="module" src="/src/flow-app.js"></script>
+  <script type="module" src="/src/export.js"></script>
+</body>
+
+</html>

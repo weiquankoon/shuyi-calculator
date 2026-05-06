@@ -1,0 +1,28 @@
+{
+  "name": "shuyi-calculator",
+  "version": "1.8.0",
+  "description": "数易生命数字计算工具 v1.8 - 深度流年分析版",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weiquankoon/shuyi-calculator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/weiquankoon/shuyi-calculator/issues"
+  },
+  "homepage": "https://github.com/weiquankoon/shuyi-calculator#readme",
+  "devDependencies": {
+    "vite": "^8.0.10"
+  },
+  "dependencies": {
+    "flatpickr": "^4.6.13"
+  }
+}
