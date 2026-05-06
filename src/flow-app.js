@@ -15,8 +15,8 @@ let currentMode = 'year'; // year, month, day
 async function init() {
   try {
     const [contentRes, meaningsRes] = await Promise.all([
-      fetch("/data/content.json"),
-      fetch("/data/meanings.json"),
+      fetch("data/content.json"),
+      fetch("data/meanings.json"),
     ]);
     config = await contentRes.json();
     numberMeanings = await meaningsRes.json();
@@ -33,7 +33,7 @@ async function init() {
 
   if (!birthStr) {
     alert("缺少出生日期参数，请从主页重新进入。");
-    window.location.href = '/';
+    window.location.href = 'index.html';
     return;
   }
 

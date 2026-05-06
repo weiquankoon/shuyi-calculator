@@ -13,8 +13,8 @@ let numberMeanings;
 async function init() {
   try {
     const [contentRes, meaningsRes] = await Promise.all([
-      fetch("/data/content.json"),
-      fetch("/data/meanings.json"),
+      fetch("data/content.json"),
+      fetch("data/meanings.json"),
     ]);
     config = await contentRes.json();
     numberMeanings = await meaningsRes.json();
