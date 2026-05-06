@@ -228,7 +228,7 @@ async function init() {
     const { century: cc, year: yy, month: mm, day: dd } = profile.rawChunks;
     const isoDate = `${cc}${yy.padStart(2, "0")}-${mm.padStart(2, "0")}-${dd.padStart(2, "0")}`;
     const params = new URLSearchParams({ name: profile.name, birth: isoDate });
-    btn.href = `/flow.html?${params.toString()}`;
+    btn.href = `flow.html?${params.toString()}`;
     btn.style.display = "inline-flex";
   }
 
