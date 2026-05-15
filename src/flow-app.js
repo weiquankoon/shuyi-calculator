@@ -235,6 +235,19 @@ function render(profile) {
       </article>
     `;
   }
+
+  // 绑定导出按钮 (流年页面继续使用原生打印)
+  const exportBtn = document.getElementById("export-pdf-btn");
+  if (exportBtn) {
+    // 避免重复绑定，可以先移除之前的监听器或确保只绑定一次
+    exportBtn.onclick = () => {
+      document.body.classList.add("pdf-exporting");
+      setTimeout(() => {
+        window.print();
+        document.body.classList.remove("pdf-exporting");
+      }, 100);
+    };
+  }
 }
 
 init();

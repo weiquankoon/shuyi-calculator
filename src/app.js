@@ -6,9 +6,11 @@ import {
   calculateProfile,
   validateDate,
 } from './calculator.js';
+import { generatePDF } from './pdf/pdf-generator.js';
 
 let config;
 let numberMeanings;
+let currentProfile = null;
 
 async function init() {
   try {
@@ -242,6 +244,22 @@ async function init() {
   }
 
   // --- 事件绑定 ---
+  const exportBtn = document.getElementById("export-pdf-btn");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      if (!currentProfile) {
+        alert("请先计算生命数字报告");
+        return;
+      }
+      exportBtn.textContent = "生成中...";
+      exportBtn.disabled = true;
+      generatePDF(currentProfile, numberMeanings).finally(() => {
+        exportBtn.textContent = "📄 导出 PDF";
+        exportBtn.disabled = false;
+      });
+    });
+  }
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -269,7 +287,8 @@ async function init() {
     };
     sessionStorage.setItem('shuyi_calculator_state', JSON.stringify(state));
 
-    render(calculateProfile(nameInput.value.trim(), validation.date, config, options));
+    currentProfile = calculateProfile(nameInput.value.trim(), validation.date, config, options);
+    render(currentProfile);
   });
 
   // --- 恢复状态 (从 sessionStorage) ---
